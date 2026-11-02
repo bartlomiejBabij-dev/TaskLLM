@@ -1,0 +1,22 @@
+[
+  {
+    "id": "gpt-6-luna",
+    "provider": "openai",
+    "name": "GPT-6 Luna",
+    "inputMicrosPerToken": 0.1,
+    "outputMicrosPerToken": 0.5,
+    "maxOutputTokens": 16384,
+    "supportsTemperature": false,
+    "supportsJson": true
+  },
+  {
+    "id": "claude-sonnet-5-5",
+    "provider": "anthropic",
+    "name": "Claude Sonnet 5.5",
+    "inputMicrosPerToken": 2,
+    "outputMicrosPerToken": 10,
+    "maxOutputTokens": 16384,
+    "supportsTemperature": false,
+    "supportsJson": true
+  }
+]

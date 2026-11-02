@@ -1,0 +1,10 @@
+FROM node:24-bookworm-slim
+WORKDIR /app
+ENV NODE_ENV=production
+COPY package.json package-lock.json ./
+# tsx is needed by the standalone TypeScript worker.
+RUN npm ci --include=dev --no-fund
+COPY tsconfig.json ./
+COPY src ./src
+USER node
+CMD ["npm", "run", "worker"]

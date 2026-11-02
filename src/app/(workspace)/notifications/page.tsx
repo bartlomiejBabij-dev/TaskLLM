@@ -1,0 +1,8 @@
+"use client";
+import Link from 'next/link';
+import { useState } from 'react';
+import { Bell,Check } from 'lucide-react';
+import type { Notification } from '@/lib/contracts';
+import { api,useResource } from '@/components/api';
+import { Button,Card,dateTime,EmptyState,ErrorNotice,PageHeader,Skeleton } from '@/components/ui';
+export default function NotificationsPage(){const {data,error,loading,refresh}=useResource<Notification[]>('/api/notifications',15000);const [busy,setBusy]=useState('');const [failure,setFailure]=useState('');async function read(id:string){setBusy(id);try{await api(`/api/notifications/${id}`,{method:'PATCH'});await refresh();}catch(e){setFailure((e as Error).message);}finally{setBusy('');}}return <><PageHeader eyebrow="YOUR WORKSPACE INBOX" title="Notifications" description="The updates that matter, all in one place." action={<Link className="button button-secondary" href="/settings/notifications">Notification preferences</Link>}/>{(error||failure)&&<ErrorNotice message={error||failure} retry={refresh}/>}<Card>{loading?<Skeleton rows={4}/>:!data?.length?<EmptyState title="You’re all caught up." description="Workflow results and account updates will appear here." icon="inbox"/>:data.map(item=><div key={item.id} className="api-key-row" style={{padding:22,opacity:item.read_at?.65:1}}><span className="workflow-card-icon"><Bell size={18}/></span><div style={{flex:1}}><strong>{item.title}</strong><p className="muted" style={{fontSize:12,marginTop:6}}>{item.body}</p><small className="muted">{dateTime(item.created_at)}</small></div>{!item.read_at&&<Button variant="ghost" loading={busy===item.id} onClick={()=>void read(item.id)} aria-label={`Mark ${item.title} as read`}><Check size={16}/>Mark read</Button>}</div>)}</Card></>}
